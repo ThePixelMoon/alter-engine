@@ -1,4 +1,5 @@
 // main.cpp
+#include <GL\glew.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #include <imgui.h>
@@ -20,7 +21,6 @@ bool showOptions = false;
 ImVec4 selectedColor = ImVec4(0.1f, 0.1f, 0.1f, 1.0f);
 
 std::vector<std::unique_ptr<GameObject>> gameObjects;
-std::vector<std::string> consoleLog;
 
 void DrawUI()
 {
@@ -95,6 +95,7 @@ void DrawUI()
 void UpdateAndRenderObjects(float deltaTime) {
     for (auto& object : gameObjects) {
         object->Update(deltaTime);
+        glLoadIdentity();
         object->Render();
     }
 }
@@ -125,15 +126,32 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         return -1;
     }
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glewExperimental = GL_TRUE;
+    GLenum glewError = glewInit();
+    if (glewError != GLEW_OK) {
+        SDL_GL_DeleteContext(glContext);
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        return -1;
+    }
 
     ImGui::CreateContext();
     ImGui_ImplSDL2_InitForOpenGL(window, glContext);
     ImGui_ImplOpenGL3_Init("#version 330");
 
+#ifdef _DEBUG
     gameObjects.push_back(std::make_unique<GameObject>("Test 1"));
     gameObjects.push_back(std::make_unique<GameObject>("Test 2"));
+#endif
+
+    glViewport(0, 0, 800, 600);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0.0, 800, 600, 0.0, -1.0, 1.0);
+    glMatrixMode(GL_MODELVIEW);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     bool running = true;
     SDL_Event event;
@@ -157,10 +175,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         ImGui::NewFrame();
 
         DrawUI();
-        UpdateAndRenderObjects(deltaTime);
 
         glClearColor(selectedColor.x, selectedColor.y, selectedColor.z, selectedColor.w);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        UpdateAndRenderObjects(deltaTime);
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

@@ -14,4 +14,11 @@ void GameObject::Render() {
     std::cout << "Rendering GameObject: " << name << " with scale ("
         << scale[0] << ", " << scale[1] << ", " << scale[2] << ")\n";
 #endif
+    glColor3f(1.0f, 0.0f, 0.0f);
+    glBegin(GL_QUADS);
+    glVertex2f(position[0] - scale[0] / 2, position[1] - scale[1] / 2);
+    glVertex2f(position[0] + scale[0] / 2, position[1] - scale[1] / 2);
+    glVertex2f(position[0] + scale[0] / 2, position[1] + scale[1] / 2);
+    glVertex2f(position[0] - scale[0] / 2, position[1] + scale[1] / 2);
+    glEnd();
 }
