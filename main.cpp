@@ -3,13 +3,47 @@
 #include <imgui.h>
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_opengl3.h>
-#include <Windows.h>
+#include <windows.h>
+
+float version = 0.1f;
+bool showAbout = false;
 
 void DrawUI()
 {
-    ImGui::Begin("Hello, ImGui!");
-    ImGui::Text("This is an ImGui window.");
-    ImGui::End();
+    ImGui::BeginMainMenuBar();
+    if (ImGui::BeginMenu("File")) {
+        ImGui::MenuItem("New");
+        ImGui::MenuItem("Open");
+        ImGui::MenuItem("Save");
+        ImGui::EndMenu();
+    }
+
+    if (ImGui::BeginMenu("Edit")) {
+        ImGui::MenuItem("Undo");
+        ImGui::MenuItem("Redo");
+        ImGui::EndMenu();
+    }
+
+    if (ImGui::BeginMenu("Help")) {
+        if (ImGui::MenuItem("About")) {
+            showAbout = true;
+        }
+        ImGui::EndMenu();
+    }
+
+    ImGui::EndMainMenuBar();
+
+    if (showAbout) {
+        ImGui::OpenPopup("About");
+    }
+    if (ImGui::BeginPopup("About")) {
+        ImGui::Text("Alter Engine\nVersion %f", version);
+        if (ImGui::Button("Close")) {
+            showAbout = false;
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
@@ -61,7 +95,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
         DrawUI();
 
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         ImGui::Render();
