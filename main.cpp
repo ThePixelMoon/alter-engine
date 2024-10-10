@@ -1,95 +1,10 @@
 // main.cpp
-#include <GL\glew.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
-#include <imgui.h>
-#include <imgui_impl_sdl2.h>
-#include <imgui_impl_opengl3.h>
-#include <windows.h>
-#include <vector>
-
-// objects, ui
-#include "gameobject.h"
-#include "scene.h"
-
-float version = 0.12f;
-
-bool showAbout = false;
-
-// options sh$t
-bool showOptions = false;
-ImVec4 selectedColor = ImVec4(0.1f, 0.1f, 0.1f, 1.0f);
-
-std::vector<std::unique_ptr<GameObject>> gameObjects;
+#include "main.h"
 
 void DrawUI()
 {
-    ImGui::BeginMainMenuBar();
-    if (ImGui::BeginMenu("File")) {
-        ImGui::MenuItem("New");
-        ImGui::MenuItem("Open");
-        ImGui::MenuItem("Save");
-        ImGui::EndMenu();
-    }
-
-    if (ImGui::BeginMenu("Edit")) {
-        ImGui::MenuItem("Undo");
-        ImGui::MenuItem("Redo");
-        ImGui::EndMenu();
-    }
-
-    if (ImGui::BeginMenu("Help")) {
-        if (ImGui::MenuItem("About")) {
-            showAbout = !showAbout;
-        }
-        ImGui::EndMenu();
-    }
-
-    ImGui::EndMainMenuBar();
-
-    if (showAbout) {
-        ImGui::OpenPopup("About");
-    }
-    if (ImGui::BeginPopup("About")) {
-        ImGui::Text("Alter Engine\nVersion %f", version);
-        if (ImGui::Button("Close")) {
-            showAbout = false;
-            ImGui::CloseCurrentPopup();
-        }
-        ImGui::EndPopup();
-    }
-
-    // sidebar
-    ImGui::SetNextWindowPos(ImVec2(0, ImGui::GetFrameHeight()));
-    ImGui::SetNextWindowSize(ImVec2(200, ImGui::GetIO().DisplaySize.y - ImGui::GetFrameHeight()));
-
-    ImGui::Begin("Sidebar", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize);
-
-    ImGui::Spacing();
-    float button_width = ImGui::CalcTextSize("Options").x + ImGui::GetStyle().FramePadding.x * 2;
-    ImGui::SetCursorPosX(ImGui::GetContentRegionMax().x - button_width - ImGui::GetStyle().FramePadding.x);
-    ImGui::SetCursorPosY(ImGui::GetContentRegionMax().y - ImGui::GetStyle().FramePadding.y - ImGui::GetFrameHeightWithSpacing());
-
-    if (ImGui::Button("Options")) {
-        showOptions = !showOptions;
-    }
-
-    ImGui::End();
-
-    // options
-    if (showOptions) {
-        ImGui::SetNextWindowPos(ImVec2((ImGui::GetIO().DisplaySize.x - 300) * 0.5f, (ImGui::GetIO().DisplaySize.y - 200) * 0.5f), ImGuiCond_Once);
-        ImGui::OpenPopup("Options");
-    }
-    if (ImGui::BeginPopup("Options")) {
-        ImGui::Text("Options");
-        ImGui::ColorPicker3("Background Color", (float*)&selectedColor);
-        if (ImGui::Button("Close")) {
-            showOptions = false;
-            ImGui::CloseCurrentPopup();
-        }
-        ImGui::EndPopup();
-    }
+    topbar.Draw(showAbout);
+    sidebar.Draw(showOptions, selectedColor, options);
 }
 
 void UpdateAndRenderObjects(float deltaTime) {

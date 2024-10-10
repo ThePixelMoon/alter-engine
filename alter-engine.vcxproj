@@ -135,11 +135,18 @@
     <ClCompile Include="objects\gameobject.cpp" />
     <ClCompile Include="objects\scene.cpp" />
     <ClCompile Include="ui\console.cpp" />
+    <ClCompile Include="ui\options.cpp" />
+    <ClCompile Include="ui\sidebar.cpp" />
+    <ClCompile Include="ui\topbar.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="main.h" />
     <ClInclude Include="objects\gameobject.h" />
     <ClInclude Include="objects\scene.h" />
     <ClInclude Include="ui\console.h" />
+    <ClInclude Include="ui\options.h" />
+    <ClInclude Include="ui\sidebar.h" />
+    <ClInclude Include="ui\topbar.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
