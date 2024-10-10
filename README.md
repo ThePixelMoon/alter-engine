@@ -1,6 +1,7 @@
 # Alter Engine
-## What?
 **Alter Engine** is a shitty engine I made as an experiment, if you want to use it, give proper credits.
+
+--------------
 
 ## Compiling
 
