@@ -5,8 +5,13 @@
 #include <imgui_impl_opengl3.h>
 #include <windows.h>
 
-float version = 0.11f;
+float version = 0.12f;
+
 bool showAbout = false;
+
+// options sh$t
+bool showOptions = false;
+ImVec4 selectedColor = ImVec4(0.1f, 0.1f, 0.1f, 1.0f);
 
 void DrawUI()
 {
@@ -51,7 +56,31 @@ void DrawUI()
 
     ImGui::Begin("Sidebar", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize);
 
+    ImGui::Spacing();
+    float button_width = ImGui::CalcTextSize("Options").x + ImGui::GetStyle().FramePadding.x * 2;
+    ImGui::SetCursorPosX(ImGui::GetContentRegionMax().x - button_width - ImGui::GetStyle().FramePadding.x);
+    ImGui::SetCursorPosY(ImGui::GetContentRegionMax().y - ImGui::GetStyle().FramePadding.y - ImGui::GetFrameHeightWithSpacing());
+
+    if (ImGui::Button("Options")) {
+        showOptions = true;
+    }
+
     ImGui::End();
+
+    // options
+    if (showOptions) {
+        ImGui::SetNextWindowPos(ImVec2((ImGui::GetIO().DisplaySize.x - 300) * 0.5f, (ImGui::GetIO().DisplaySize.y - 200) * 0.5f), ImGuiCond_Once);
+        ImGui::OpenPopup("Options");
+    }
+    if (ImGui::BeginPopup("Options")) {
+        ImGui::Text("Options");
+        ImGui::ColorPicker3("Background Color", (float*)&selectedColor);
+        if (ImGui::Button("Close")) {
+            showOptions = false;
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
@@ -103,7 +132,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
         DrawUI();
 
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        glClearColor(selectedColor.x, selectedColor.y, selectedColor.z, selectedColor.w);
         glClear(GL_COLOR_BUFFER_BIT);
 
         ImGui::Render();
