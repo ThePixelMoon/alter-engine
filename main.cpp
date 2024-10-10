@@ -1,9 +1,15 @@
+// main.cpp
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #include <imgui.h>
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_opengl3.h>
 #include <windows.h>
+#include <vector>
+
+// objects, ui
+#include "gameobject.h"
+#include "scene.h"
 
 float version = 0.12f;
 
@@ -12,6 +18,9 @@ bool showAbout = false;
 // options sh$t
 bool showOptions = false;
 ImVec4 selectedColor = ImVec4(0.1f, 0.1f, 0.1f, 1.0f);
+
+std::vector<std::unique_ptr<GameObject>> gameObjects;
+std::vector<std::string> consoleLog;
 
 void DrawUI()
 {
@@ -31,7 +40,7 @@ void DrawUI()
 
     if (ImGui::BeginMenu("Help")) {
         if (ImGui::MenuItem("About")) {
-            showAbout = true;
+            showAbout = !showAbout;
         }
         ImGui::EndMenu();
     }
@@ -62,7 +71,7 @@ void DrawUI()
     ImGui::SetCursorPosY(ImGui::GetContentRegionMax().y - ImGui::GetStyle().FramePadding.y - ImGui::GetFrameHeightWithSpacing());
 
     if (ImGui::Button("Options")) {
-        showOptions = true;
+        showOptions = !showOptions;
     }
 
     ImGui::End();
@@ -80,6 +89,13 @@ void DrawUI()
             ImGui::CloseCurrentPopup();
         }
         ImGui::EndPopup();
+    }
+}
+
+void UpdateAndRenderObjects(float deltaTime) {
+    for (auto& object : gameObjects) {
+        object->Update(deltaTime);
+        object->Render();
     }
 }
 
@@ -116,8 +132,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     ImGui_ImplSDL2_InitForOpenGL(window, glContext);
     ImGui_ImplOpenGL3_Init("#version 330");
 
+    gameObjects.push_back(std::make_unique<GameObject>("Test 1"));
+    gameObjects.push_back(std::make_unique<GameObject>("Test 2"));
+
     bool running = true;
     SDL_Event event;
+    float deltaTime = 0.0f;
+    Uint32 lastTime = SDL_GetTicks();
+
     while (running) {
         while (SDL_PollEvent(&event)) {
             ImGui_ImplSDL2_ProcessEvent(&event);
@@ -126,11 +148,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
             }
         }
 
+        Uint32 currentTime = SDL_GetTicks();
+        deltaTime = (currentTime - lastTime) / 1000.0f;
+        lastTime = currentTime;
+
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
 
         DrawUI();
+        UpdateAndRenderObjects(deltaTime);
 
         glClearColor(selectedColor.x, selectedColor.y, selectedColor.z, selectedColor.w);
         glClear(GL_COLOR_BUFFER_BIT);

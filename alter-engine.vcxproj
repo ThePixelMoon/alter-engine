@@ -118,7 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Moon\Desktop\a\vcpkg\installed\x64-windows\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)ui;$(ProjectDir)objects;C:\Users\Moon\Desktop\a\vcpkg\installed\x64-windows\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -132,6 +132,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="objects\gameobject.cpp" />
+    <ClCompile Include="objects\scene.cpp" />
+    <ClCompile Include="ui\console.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="objects\gameobject.h" />
+    <ClInclude Include="objects\scene.h" />
+    <ClInclude Include="ui\console.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
