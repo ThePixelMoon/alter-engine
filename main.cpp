@@ -4,7 +4,7 @@
 void DrawUI()
 {
     topbar.Draw(showAbout);
-    sidebar.Draw(showOptions, selectedColor, options);
+    sidebar.Draw(showOptions, options);
 }
 
 void UpdateAndRenderObjects(float deltaTime) {
@@ -91,7 +91,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
         DrawUI();
 
-        glClearColor(selectedColor.x, selectedColor.y, selectedColor.z, selectedColor.w);
+        if (darkTheme == true) {
+            ImGui::StyleColorsDark();
+            glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        }
+        else {
+            ImGui::StyleColorsLight();
+            glClearColor(0.9f, 0.9f, 0.9f, 1.0f);
+        }
+
         glClear(GL_COLOR_BUFFER_BIT);
 
         UpdateAndRenderObjects(deltaTime);

@@ -28,7 +28,7 @@ float version = 0.13f;
 bool showAbout = false;
 bool showOptions = false;
 
-ImVec4 selectedColor = ImVec4(0.1f, 0.1f, 0.1f, 1.0f);
+bool darkTheme = true;
 
 std::vector<std::unique_ptr<GameObject>> gameObjects;
 

@@ -6,11 +6,11 @@
 #endif
 
 #include <imgui.h>
+extern bool darkTheme;
 
 class Options {
 public:
-	void Draw(bool& showOptions,
-			  ImVec4& selColor);
+	void Draw(bool& showOptions);
 };
 
 #endif

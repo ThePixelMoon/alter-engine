@@ -10,9 +10,7 @@
 
 class SideBar {
 public:
-    void Draw(bool& showOptions,
-        ImVec4& selectedColor,
-        Options option);
+    void Draw(bool& showOptions, Options& options);
 };
 
 #endif
