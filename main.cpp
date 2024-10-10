@@ -5,7 +5,7 @@
 #include <imgui_impl_opengl3.h>
 #include <windows.h>
 
-float version = 0.1f;
+float version = 0.11f;
 bool showAbout = false;
 
 void DrawUI()
@@ -44,6 +44,14 @@ void DrawUI()
         }
         ImGui::EndPopup();
     }
+
+    // sidebar
+    ImGui::SetNextWindowPos(ImVec2(0, ImGui::GetFrameHeight()));
+    ImGui::SetNextWindowSize(ImVec2(200, ImGui::GetIO().DisplaySize.y - ImGui::GetFrameHeight()));
+
+    ImGui::Begin("Sidebar", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize);
+
+    ImGui::End();
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
