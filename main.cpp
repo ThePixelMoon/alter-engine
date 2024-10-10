@@ -59,15 +59,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     gameObjects.push_back(std::make_unique<GameObject>("Test 2"));
 #endif
 
-    glViewport(0, 0, 800, 600);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0.0, 800, 600, 0.0, -1.0, 1.0);
-    glMatrixMode(GL_MODELVIEW);
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
     bool running = true;
     SDL_Event event;
     float deltaTime = 0.0f;
