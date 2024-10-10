@@ -7,4 +7,4 @@ Required **vcpkg** libraries:
 - SDL2
 - Dear ImGui (*imgui[core,sdl2-binding,opengl3-binding]*)
 
-## MAKE SURE TO GET THE DYNAMIC ONES!!!
+### MAKE SURE TO GET THE DYNAMIC ONES!!!
