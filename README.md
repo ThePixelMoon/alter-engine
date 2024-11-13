@@ -5,4 +5,4 @@
 
 ## Compiling
 
-you must have Visual Studio 2022 installed, that's it.
+you must have CMake and Visual Studio 2022 (if Windows) installed, that's it.
